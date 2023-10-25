@@ -1,0 +1,22 @@
+groups:
+ 
+- name: monitoring alerts
+  rules:
+  
+    - alert: InstanceDown
+        expr: up < 1
+        for: 45s
+        labels:
+          severity: Major
+        annotations:
+          summary: '{{ $labels.instance }} is offline (unreachable)'
+
+    - alert: CpuLoad
+      expr: node_load15 / (count without (cpu, mode) (node_cpu_seconds_total{mode="system"})) > 2
+      for: 15m
+      labels:
+        severity: critical
+      annotations:
+        identifier: "{{ $labels.instance }}"
+        summary: "CPU load (instance {{ $labels.instance }})"
+        description: "<!channel>  CPU load (15m) is high    VALUE = {{ $value }}    LABELS: {{ $labels.job }} : {{ $labels.instance }}"

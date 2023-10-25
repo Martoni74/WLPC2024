@@ -1,0 +1,26 @@
+---
+modules:
+    switches:
+        version: 2
+        auth:
+            community: public
+        walk:
+            - ifIndex
+            - ifAdminStatus
+            - ifOperStatus
+            - ifLastChange
+            - ifInDiscards
+            - ifInErrors
+            - ifOutDiscards
+            - ifOutErrors
+            - ifHCInOctets
+            - ifInUcastPkts
+            - ifInMulticastPkts
+            - ifInBroadcastPkts
+            - ifHCOutOctets
+            - ifOutUcastPkts
+            - ifOutMulticastPkts
+            - ifOutBroadcastPkts
+            - ifHighSpeed
+            - ifName
+            - sysUpTime

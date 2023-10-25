@@ -1,0 +1,106 @@
+global:
+  scrape_interval:     30s # by default, it scrapes every 15 secondes
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    env: 'wlpc2024'   # name of your environnement
+
+
+# spécification du serveur alertmanager
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - localhost:9093
+    scheme: http
+    timeout: 10s
+
+# rules of alerting
+#
+rule_files:
+  - "alert.rules/alerts.rules.yml"
+
+# scrape_config list all the devices you monitor with metrics, snmp, mqtt, ...
+scrape_configs:
+
+  - job_name: 'MONITORING'     # <-- RPI4 - localhost
+    static_configs:
+      - targets: ['192.168.30.18:9100']
+    scrape_interval: 30s
+
+  - job_name: 'MACBOOK'     # <-- RPI4 - localhost
+    static_configs:
+      - targets: ['192.168.237.81:9100']
+    scrape_interval: 30s
+
+  - job_name: 'NAS'     # <-- Synology Node exporter
+    static_configs:
+      - targets: ['192.168.1.20:9100']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Switch is available via snmp-exporter - we specify the module name
+  - job_name: 'Switches'     # <-- Switch with snmp exporter
+    static_configs:
+      - targets: 
+        - 192.168.1.3
+    scrape_interval: 1m
+    params:
+     module:
+     - switches
+    scrape_timeout: 50s
+    metrics_path: /snmp
+#    scheme: http
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 192.168.20.10:9116  # The SNMP exporter's real hostname:port.
+
+  # Blackbox is reaching the target via ping / html
+  - job_name: 'blackbox-http'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: ([^,]*),(.*)                   # <-- regex to keep the name only
+        replacement: $1
+        target_label: __param_target
+      - source_labels: [__address__]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.30.18:9115  # The blackbox exporter's real hostname:port.
+    static_configs:
+      - targets: 
+        - http://192.168.30.18:9090,prometheus
+        - https://www.thewlpc.com,wlpc
+#        - 130.223.16.42
+
+  # Blackbox is reaching the target via ping / html
+  - job_name: 'blackbox-ping'
+    metrics_path: /probe
+    params:
+      module: [icmp]  # ping device.
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: ([^,]*),(.*)                   # <-- regex to keep name only
+        replacement: $1
+        target_label: __param_target
+      - source_labels: [__address__]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.30.18:9115  # The blackbox exporter's real hostname:port.
+    static_configs:
+      - targets: 
+        - 192.168.237.81,macbook
+        - 192.168.30.18,prometheus
+
+  - job_name: 'lorawan-ttn'     # <-- TTN EXAMPLE
+    static_configs:
+      - targets: ['192.168.30.18:9641']
+

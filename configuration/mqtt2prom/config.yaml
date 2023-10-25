@@ -1,0 +1,221 @@
+# Settings for the MQTT Client. Currently only these three are supported
+mqtt:
+
+  # Change au1.cloud.thethings.network to our MQTT Public Address
+  server: tcp://eu1.cloud.thethings.network:1883
+
+  # Change luppy-application@ttn to our MQTT Username
+  user: YOUR_USER@ttn
+
+  # Change YOUR_API_KEY to our MQTT Password
+  password: YOUR_TTN_API_KEY
+
+  # Topic path to subscribe to. "#" means All Topics.
+  topic_path: "v3/+/devices/+/up"
+
+  # MQTT QoS level
+  qos: 0
+
+  # Extract the device ID (eui-YOUR_DEVICE_EUI) from the topic path, which looks like...
+  # v3/luppy-application@ttn/devices/eui-YOUR_DEVICE_EUI/up
+  device_id_regex: "(.*/)?devices/(?P<deviceid>.*)/.*"
+
+  # Optional: for TLS client certificates
+  # ca_cert: certs/AmazonRootCA1.pem
+  # client_cert: certs/xxxxx-certificate.pem.crt
+  # client_key: certs/xxxxx-private.pem.key
+
+  # Optional: Used to specify ClientID. The default is <hostname>-<pid>
+  # client_id: somedevice
+
+cache:
+
+  # Timeout. Each received metric will be presented for this time if no update is send via MQTT.
+  # Set the timeout to -1 to disable the deletion of metrics from the cache. The exporter presents the ingest timestamp
+  # to prometheus.
+  timeout: 24h
+
+# List of valid metrics. Only metrics listed here will be exported
+metrics:
+
+  # Temperature Metric
+  # Name of the metric in prometheus
+  - prom_name: temperature
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.temperature"
+    # Prometheus help text for this metric
+    help: "Temperature"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: temperature
+
+  # Temperature Metric
+  # Name of the metric in prometheus
+  - prom_name: humidity
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.humidity"
+    # Prometheus help text for this metric
+    help: "Humidity"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: humidity
+
+  # Light Level Metric
+  # Name of the metric in prometheus
+  - prom_name: light
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.light"
+    # Prometheus help text for this metric
+    help: "Light Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: light
+
+  # illumination Level Metric
+  # Name of the metric in prometheus
+  - prom_name: illumination
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.illumination"
+    # Prometheus help text for this metric
+    help: "Illumination Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: illumination
+
+  # co2 Level Metric
+  # Name of the metric in prometheus
+  - prom_name: co2
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.co2"
+    # Prometheus help text for this metric
+    help: "Co2 Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: co2
+
+  # pressure Level Metric
+  # Name of the metric in prometheus
+  - prom_name: pressure
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.pressure"
+    # Prometheus help text for this metric
+    help: "Pressure Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: pressure
+
+  # tvoc Level Metric
+  # Name of the metric in prometheus
+  - prom_name: tvoc
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.tvoc"
+    # Prometheus help text for this metric
+    help: "Tvoc Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: tvoc
+
+  # infrared Level Metric
+  # Name of the metric in prometheus
+  - prom_name: infrared
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.infrared"
+    # Prometheus help text for this metric
+    help: "Infrared Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: infrared
+
+  # Activity Level Metric
+  # Name of the metric in prometheus
+  - prom_name: activity
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.activity"
+    # Prometheus help text for this metric
+    help: "Activity Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: activity
+
+  # Latitude Level Metric
+  # Name of the metric in prometheus
+  - prom_name: latitude
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.lat"
+    # Prometheus help text for this metric
+    help: "latitude Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: latitude
+
+  # Longitude Level Metric
+  # Name of the metric in prometheus
+  - prom_name: longitude
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.long"
+    # Prometheus help text for this metric
+    help: "longitude Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: longitude
+
+  # Altitude Level Metric
+  # Name of the metric in prometheus
+  - prom_name: altitude
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.alt"
+    # Prometheus help text for this metric
+    help: "altitude Level"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: altitude
+
+  # location Level Metric
+  # Name of the metric in prometheus
+  - prom_name: location
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.location"
+    # Prometheus help text for this metric
+    help: "Location"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: location
+
+  # rssi Level Metric
+  # Name of the metric in prometheus
+  - prom_name: rssi
+    # Name of the metric in a MQTT JSON message
+    mqtt_name: "uplink_message.decoded_payload.rssi"
+    # Prometheus help text for this metric
+    help: "rssi"
+    # Prometheus type for this metric. Valid values are: "gauge" and "counter"
+    type: gauge
+    # Map of string to string for constant labels. This labels will be attached to every prometheus metric
+    const_labels:
+      sensor_type: rssi

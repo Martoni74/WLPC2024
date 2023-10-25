@@ -1,0 +1,13 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes: [] #default to 2xx
+  method: GET
+
+  icmp:
+    prober: icmp
+    icmp:
+      ip_protocol_fallback: false
+      preferred_ip_protocol: "ip4"
