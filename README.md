@@ -1,8 +1,15 @@
+# Note
+
+Sorry for the name, I'm already in 2024 :-D (probably the stress of presentation :-D ).
+
+There are a few files missing and Wiki is coming in a few days (I must migrate from my test repo to have a clean repo with limited number of commits).
+Will be fixed in a few days when I get a good connexion.
+
 # Source
-the origin of the project comes from french medium article 
+the origin of the project comes from french medium article and the work done iin University of Lausanne
 https://github.com/ouidou/monitoring-bootstrap
 
-# WLANProPrague
+# WLPC Prague 2023
 Demo project Prometheus Grafana
 
 # Install pre-requesite on server / RPi
